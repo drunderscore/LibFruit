@@ -27,9 +27,7 @@ namespace LibFruit
 
 // Specifying the namespace constantly isn't always the best,
 // especially in incredibly common types like these.
-#ifndef FRUIT_USE_NAMESPACED_TYPES
 using u8 = LibFruit::u8;
 using u16 = LibFruit::u16;
 using u32 = LibFruit::u32;
 using u64 = LibFruit::u64;
-#endif

@@ -34,3 +34,6 @@ namespace LibFruit
         std::string m_error;
     };
 }
+
+template<typename T>
+using Result = LibFruit::Result<T>;
