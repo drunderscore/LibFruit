@@ -6,10 +6,14 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_library(LibFruit STATIC
+    fmt/format.cc
+    fmt/os.cc
+
     Fruit.h
     Types.h
     Result.h
     Log.h
+    Log.cpp
 
     Graphics/MessageBox.h
     Graphics/MessageBox.cpp
@@ -19,9 +23,11 @@ add_library(LibFruit STATIC
     Data/Parser.h
     Data/Parser.cpp
     Data/Stream.h
-
-    loguru/loguru.hpp
-    loguru/loguru.cpp
     )
 
-target_include_directories(LibFruit PUBLIC .)
+target_include_directories(LibFruit PRIVATE .)
+target_compile_definitions(LibFruit PRIVATE LOGURU_USE_FMTLIB)
+
+add_executable(Test Test/Test.cpp)
+target_include_directories(Test PRIVATE SYSTEM .)
+target_link_libraries(Test PRIVATE LibFruit)
