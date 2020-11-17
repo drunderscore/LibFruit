@@ -33,9 +33,11 @@ namespace LibFruit
         }
 
         static Logger& out() { return m_out; }
+        static Logger& dbg() { return m_dbg; }
         static Logger& error() { return m_err; }
 
     private:
+        static Logger m_dbg;
         static Logger m_out;
         static Logger m_err;
         FILE* m_handle;
