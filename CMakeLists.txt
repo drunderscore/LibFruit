@@ -27,7 +27,3 @@ add_library(LibFruit STATIC
 
 target_include_directories(LibFruit PRIVATE .)
 target_compile_definitions(LibFruit PRIVATE LOGURU_USE_FMTLIB)
-
-add_executable(Test Test/Test.cpp)
-target_include_directories(Test PRIVATE SYSTEM .)
-target_link_libraries(Test PRIVATE LibFruit)
