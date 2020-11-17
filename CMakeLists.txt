@@ -25,5 +25,5 @@ add_library(LibFruit STATIC
     Data/Stream.h
     )
 
-target_include_directories(LibFruit PRIVATE .)
-target_compile_definitions(LibFruit PRIVATE LOGURU_USE_FMTLIB)
+target_include_directories(LibFruit PUBLIC .)
+target_compile_definitions(LibFruit PUBLIC LOGURU_USE_FMTLIB)
