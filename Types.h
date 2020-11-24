@@ -22,7 +22,10 @@ namespace LibFruit
     using u8 = uint8_t;
     using u16 = uint16_t;
     using u32 = uint32_t;
+    using ul32 = unsigned long;
     using u64 = uint64_t;
+    using ul64 = unsigned long long;
+    using raw_ptr = uintptr_t;
 }
 
 // Specifying the namespace constantly isn't always the best,
@@ -30,4 +33,7 @@ namespace LibFruit
 using u8 = LibFruit::u8;
 using u16 = LibFruit::u16;
 using u32 = LibFruit::u32;
+using ul32 = LibFruit::ul32;
 using u64 = LibFruit::u64;
+using ul64 = LibFruit::ul64;
+using raw_ptr = LibFruit::raw_ptr;
