@@ -26,6 +26,8 @@ add_library(LibFruit STATIC
 
     Memory/Protection.h
     Memory/Protection.cpp
+    Memory/Detour/Virtual.h
+    Memory/Detour/Virtual.cpp
     )
 
 target_include_directories(LibFruit PUBLIC .)
