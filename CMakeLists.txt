@@ -23,6 +23,9 @@ add_library(LibFruit STATIC
     Data/Parser.h
     Data/Parser.cpp
     Data/Stream.h
+
+    Memory/Protection.h
+    Memory/Protection.cpp
     )
 
 target_include_directories(LibFruit PUBLIC .)
