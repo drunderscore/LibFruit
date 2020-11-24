@@ -20,7 +20,7 @@
 
 namespace LibFruit::Detour
 {
-    Virtual::Virtual(VTable vtable, u32 index, void* detour, bool enable_now) : m_vtable(vtable), m_index(index), m_detour(detour)
+    Virtual::Virtual(void** vtable, u32 index, void* detour, bool enable_now) : m_vtable(vtable), m_index(index), m_detour(detour)
     {
         if(enable_now)
             enable();

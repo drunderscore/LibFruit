@@ -17,38 +17,38 @@
 #pragma once
 #include "Types.h"
 
-namespace LibFruit::Detour
+namespace LibFruit
 {
-    class Virtual
+    class VTable
     {
     public:
+        void* vtable_entry(u32 index)
+        {
+            return m_obj[index];
+        }
 
-        Virtual(void**, u32 index, void* detour, bool enable_now = true);
-        ~Virtual();
+        template<typename TFuncDec>
+        TFuncDec vtable_entry_as_function(u32 index)
+        {
+            return reinterpret_cast<TFuncDec>(vtable_entry(index));
+        }
 
-        void enable();
-        void disable();
-
-        void* original() { return m_original; }
-        bool is_enabled() { return m_enabled; }
-
-    protected:
-        void** m_vtable;
-        u32 m_index;
-        void* m_original;
-        void* m_detour;
-        bool m_enabled = false;
+    private:
+        void** m_obj;
     };
 
-    template<typename T, typename TFuncDec>
-    class SmartVirtual : public Virtual
+    template<typename T>
+    class ObjectPointer
     {
     public:
-        SmartVirtual(T obj, u32 index, TFuncDec detour, bool enable_now = true) : Virtual(*reinterpret_cast<void***>(obj), index, reinterpret_cast<void*>(detour), enable_now) {}
+        ObjectPointer(T obj) : m_obj(obj) {}
 
-        TFuncDec call_original()
+        VTable* vtable()
         {
-            return reinterpret_cast<TFuncDec>(m_original);
+            return reinterpret_cast<VTable*>(m_obj);
         }
+
+    protected:
+        T m_obj;
     };
 }
