@@ -5,6 +5,10 @@ project(LibFruit)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(SUBHOOK_TESTS OFF)
+set(SUBHOOK_STATIC ON)
+add_subdirectory(subhook)
+
 add_library(LibFruit STATIC
     fmt/format.cc
     fmt/os.cc
@@ -28,6 +32,8 @@ add_library(LibFruit STATIC
     Memory/Protection.cpp
     Memory/Detour/Virtual.h
     Memory/Detour/Virtual.cpp
+    Memory/Detour/Memory.h
+    Memory/Detour/Memory.cpp
     )
 
 target_include_directories(LibFruit PUBLIC .)
