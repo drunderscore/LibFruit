@@ -1,5 +1,5 @@
 // Copyright James Puleo 2020
-// Copyright Riverbend 2020
+// Copyright LibFruit 2020
 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
