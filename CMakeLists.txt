@@ -38,3 +38,4 @@ add_library(LibFruit STATIC
 
 target_include_directories(LibFruit PUBLIC .)
 target_compile_definitions(LibFruit PUBLIC LOGURU_USE_FMTLIB)
+target_link_libraries(LibFruit PUBLIC subhook)
