@@ -59,6 +59,6 @@ namespace LibFruit
         if(!include_suffix)
             return std::to_string(convert(t));
 
-        return fmt::format("{} {}", convert(t), m_type_suffix[static_cast<u32>(t)]);
+        return fmt::format("{:.2f} {}", convert(t), m_type_suffix[static_cast<u32>(t)]);
     }
 }
