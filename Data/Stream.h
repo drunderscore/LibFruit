@@ -24,6 +24,12 @@ namespace LibFruit
     class Stream
     {
     public:
+        enum class RelativePosition
+        {
+            Beginning,
+            Ending
+        };
+
         Stream(u8* data, u32 size, bool copy = true) : m_size(size), m_our_data(copy)
         {
             if(copy)
@@ -57,7 +63,7 @@ namespace LibFruit
         T read()
         {
             // FIXME: Is this the best you got?
-            auto val = *reinterpret_cast<T*>(&m_data[m_index]);
+            auto val = *reinterpret_cast<T*>(m_data + m_index);
             m_index += sizeof(T);
             return val;
         }
@@ -83,7 +89,17 @@ namespace LibFruit
             m_index += size;
         }
 
-        std::string read_string()
+        std::string read_null_terminated_string()
+        {
+            auto start_index = m_index;
+            while(read<u8>() != 0)
+                continue;
+
+            return std::string(reinterpret_cast<const char*>(m_data + start_index), m_index - start_index - 1);
+        }
+
+        // Read a string as written by a System.IO.BinaryWriter (from System.Runtime.dll)
+        std::string read_csharp_string()
         {
             auto len = read_7bit_encoded_int();
             std::string str;
@@ -107,10 +123,35 @@ namespace LibFruit
             return result;
         }
 
+        bool can_read()
+        {
+            return m_index < m_size;
+        }
+
+        bool seek(u32 position, RelativePosition relative = RelativePosition::Beginning)
+        {
+            if(position > m_size)
+                return false;
+
+            if(relative == RelativePosition::Beginning)
+            {
+                m_index = position;
+                return true;
+            }
+
+            if(relative == RelativePosition::Ending)
+            {
+                m_index = m_size - position;
+                return true;
+            }
+
+            return false;
+        }
+
     private:
         u32 m_index = 0;
         u8* m_data;
-        std::streamsize m_size;
+        u64 m_size;
         bool m_our_data;
     };
 }

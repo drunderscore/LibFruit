@@ -27,6 +27,7 @@ add_library(LibFruit STATIC
     Data/Parser.h
     Data/Parser.cpp
     Data/Stream.h
+    Data/FileFormat/YSC.cpp
 
     Memory/Protection.h
     Memory/Protection.cpp
