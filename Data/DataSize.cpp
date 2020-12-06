@@ -16,7 +16,7 @@
 
 #include "DataSize.h"
 #include <cmath>
-#include <sstream>
+#include <fmt/core.h>
 
 namespace LibFruit
 {
@@ -24,6 +24,25 @@ namespace LibFruit
     // types 'kibi' and 'mebi' and so on. This is to avoid confusion
     // with SI types.
     const char* DataSize::m_type_suffix[] = {"B", "KiB", "MiB", "GiB", "TiB", "PiB"};
+
+    DataSize::DataSize(u64 size) : m_size(size)
+    {
+        if(m_size < 1024)
+        {
+            m_most_fitting = display(Type::Byte);
+        }
+        else
+        {
+            auto exp = 1;
+
+            while(m_size + 1 > std::powl(1024, exp))
+                exp++;
+
+            exp--;
+
+            m_most_fitting = display(static_cast<Type>(exp));
+        }
+    }
 
     inline double DataSize::convert(Type t)
     {
@@ -40,23 +59,6 @@ namespace LibFruit
         if(!include_suffix)
             return std::to_string(convert(t));
 
-        std::stringstream stream;
-        stream << convert(t) << ' ' << m_type_suffix[static_cast<u32>(t)];
-        return stream.str();
-    }
-
-    std::string DataSize::display_most_fitting()
-    {
-        if(m_size < 1024)
-            return std::to_string(m_size);
-
-        auto exp = 1;
-
-        while(m_size > std::powl(1024, exp))
-            exp++;
-
-        exp--;
-
-        return display(static_cast<Type>(exp));
+        return fmt::format("{} {}", convert(t), m_type_suffix[static_cast<u32>(t)]);
     }
 }

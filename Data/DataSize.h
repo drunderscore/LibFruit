@@ -20,7 +20,6 @@
 
 namespace LibFruit
 {
-    // TODO: Improve performance of this data by caching some values
     class DataSize
     {
     public:
@@ -38,16 +37,17 @@ namespace LibFruit
             Petabyte
         };
 
-        DataSize(u64 size) : m_size(size) {}
+        DataSize(u64 size);
         u64 size() { return m_size; }
 
         inline double convert(Type);
         inline std::string display(Type, bool include_suffix = true);
         // Display this as the most fitting size.
         // Will pick the last size that displays a whole number.
-        std::string display_most_fitting();
+        std::string& most_fitting() { return m_most_fitting; }
     private:
         static const char* m_type_suffix[];
         u64 m_size;
+        std::string m_most_fitting;
     };
 }
