@@ -48,7 +48,7 @@ namespace LibFruit
             }
         }
 
-        Stream(std::vector<u8>& data) : Stream(data.data(), data.size(), false) {}
+        Stream(const std::vector<u8>& data) : Stream(data.data(), data.size(), false) {}
 
         Stream(std::istream& src)
         {
