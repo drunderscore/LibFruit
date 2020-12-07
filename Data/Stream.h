@@ -18,6 +18,7 @@
 #include <istream>
 #include <string>
 #include "Types.h"
+#include <vector>
 
 namespace LibFruit
 {
@@ -27,10 +28,11 @@ namespace LibFruit
         enum class RelativePosition
         {
             Beginning,
+            Current,
             Ending
         };
 
-        Stream(u8* data, u32 size, bool copy = true) : m_size(size), m_our_data(copy)
+        Stream(const u8* data, u32 size, bool copy = true) : m_size(size), m_our_data(copy)
         {
             if(copy)
             {
@@ -39,9 +41,14 @@ namespace LibFruit
             }
             else
             {
-                m_data = data;
+                // Const cast is okay:
+                // We don't modify the data ever, we only ever "write" to it
+                // on copy construction.
+                m_data = const_cast<u8*>(data);
             }
         }
+
+        Stream(std::vector<u8>& data) : Stream(data.data(), data.size(), false) {}
 
         Stream(std::istream& src)
         {
@@ -57,6 +64,16 @@ namespace LibFruit
         {
             if(m_our_data)
                 delete[] m_data;
+        }
+
+        const u8* get() const
+        {
+            return m_data;
+        }
+
+        const u8* current() const
+        {
+            return get() + m_index;
         }
 
         template<typename T>
@@ -136,6 +153,12 @@ namespace LibFruit
             if(relative == RelativePosition::Beginning)
             {
                 m_index = position;
+                return true;
+            }
+
+            if(relative == RelativePosition::Current)
+            {
+                m_index += position;
                 return true;
             }
 
