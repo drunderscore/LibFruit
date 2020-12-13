@@ -171,6 +171,8 @@ namespace LibFruit
             return false;
         }
 
+        u64 size() { return m_size; }
+
     private:
         u32 m_index = 0;
         u8* m_data;
