@@ -17,32 +17,74 @@
 #pragma once
 #include <stdio.h>
 #include "fmt/core.h"
+#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
+#endif
 
 namespace LibFruit
 {
-    class Logger
+    // Can't make templated methods virtual so... this will have to do...
+    // Sadly this class has turned very ugly because the original design was singleton and inherited...
+    // but because of the above issue, everything got worse.
+    class DebugLogger
     {
+        friend class Logger;
     public:
-        Logger(FILE* handle) : m_handle(handle) {}
-
         template<typename... TArgs>
         void println(const char* msg, TArgs&&... args)
         {
-            fmt::print(m_handle, msg, args...);
-            fmt::print(m_handle, "\n");
+#ifdef _DEBUG
+            fmt::print(stdout, msg, args...);
+            fmt::print(stdout, "\n");
+#endif
+#ifdef _WIN32
+            OutputDebugStringA(fmt::format(msg, args...).c_str());
+#endif
+        }
+    private:
+        DebugLogger() {}
+    };
+
+    class ErrorLogger
+    {
+        friend class Logger;
+    public:
+        template<typename... TArgs>
+        void println(const char* msg, TArgs&&... args)
+        {
+            fmt::print(stderr, msg, args...);
+            fmt::print(stderr, "\n");
+#ifdef _WIN32
+            OutputDebugStringA(fmt::format(msg, args...).c_str());
+#endif
+        }
+    private:
+        ErrorLogger() {}
+    };
+
+    class Logger
+    {
+    public:
+        template<typename... TArgs>
+        void println(const char* msg, TArgs&&... args)
+        {
+            fmt::print(stdout, msg, args...);
+            fmt::print(stdout, "\n");
         }
 
         static Logger& out() { return m_out; }
-        static Logger& dbg() { return m_dbg; }
-        static Logger& error() { return m_err; }
+        static DebugLogger& dbg() { return m_dbg; }
+        static ErrorLogger& error() { return m_err; }
 
     private:
-        static Logger m_dbg;
+        Logger() {}
         static Logger m_out;
-        static Logger m_err;
-        FILE* m_handle;
+        static ErrorLogger m_err;
+        static DebugLogger m_dbg;
     };
 }
+
 using LibFruit::Logger;
 
 // Macros are ugly, but we need them for logging compile-time data.

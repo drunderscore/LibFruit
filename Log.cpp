@@ -18,7 +18,7 @@
 
 namespace LibFruit
 {
-    Logger Logger::m_out(stdout);
-    Logger Logger::m_dbg(stdout);
-    Logger Logger::m_err(stderr);
+    Logger Logger::m_out;
+    DebugLogger Logger::m_dbg;
+    ErrorLogger Logger::m_err;
 }
