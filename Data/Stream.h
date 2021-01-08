@@ -32,7 +32,7 @@ namespace LibFruit
             Ending
         };
 
-        Stream(const u8* data, u32 size, bool copy = true) : m_size(size), m_our_data(copy)
+        Stream(const u8* data, u64 size, bool copy = true) : m_size(size), m_our_data(copy)
         {
             if(copy)
             {
@@ -174,7 +174,7 @@ namespace LibFruit
         u64 size() { return m_size; }
 
     private:
-        u32 m_index = 0;
+        u64 m_index = 0;
         u8* m_data;
         u64 m_size;
         bool m_our_data;

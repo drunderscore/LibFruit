@@ -47,7 +47,7 @@ namespace LibFruit
     inline double DataSize::convert(Type t)
     {
         if(t == Type::Byte)
-            return m_size;
+            return static_cast<double>(m_size);
 
         auto exp = static_cast<u32>(t);
         auto val = std::powl(1024, exp);

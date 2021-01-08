@@ -36,13 +36,13 @@ namespace LibFruit::FileFormat
         public:
             static constexpr u64 MAGIC = 0x1405A9ED0;
             friend class YSC;
-            u64 page_map_ptr() { return to_pointer(m_page_map_pointer); }
-            u64 code_blocks_ptr() { return to_pointer(m_code_blocks_base_pointer); }
-            u64 statics_ptr() { return to_pointer(m_statics_pointer); }
-            u64 globals_ptr() { return to_pointer(m_globals_pointer); }
-            u64 natives_ptr() { return to_pointer(m_natives_pointer); }
-            u64 script_name_ptr() { return to_pointer(m_script_name_pointer); }
-            u64 string_blocks_ptr() { return to_pointer(m_string_blocks_base_pointer); }
+            u32 page_map_ptr() { return to_pointer(m_page_map_pointer); }
+            u32 code_blocks_ptr() { return to_pointer(m_code_blocks_base_pointer); }
+            u32 statics_ptr() { return to_pointer(m_statics_pointer); }
+            u32 globals_ptr() { return to_pointer(m_globals_pointer); }
+            u32 natives_ptr() { return to_pointer(m_natives_pointer); }
+            u32 script_name_ptr() { return to_pointer(m_script_name_pointer); }
+            u32 string_blocks_ptr() { return to_pointer(m_string_blocks_base_pointer); }
 
             u32 code_size() { return m_code_size; }
             u32 string_size() { return m_string_size; }
@@ -74,7 +74,8 @@ namespace LibFruit::FileFormat
             u32 m_null4;
             u32 m_null5;
 
-            static inline u64 to_pointer(u64 val)
+            // This is a pointer into the file itself, so it should be 32-bit
+            static inline u32 to_pointer(u64 val)
             {
                 return val & 0xFFFFFF;
             }
@@ -100,7 +101,7 @@ namespace LibFruit::FileFormat
         {
         public:
             friend class YSC;
-            const u32 size() const { return m_string_indexes.size(); }
+            const size_t size() const { return m_string_indexes.size(); }
             const char* get(u32 index) const;
         private:
             struct String
@@ -132,7 +133,7 @@ namespace LibFruit::FileFormat
         std::vector<u64> m_natives;
 
         YSC() {}
-        static void read_blocks(Stream& stream, BlockMap& read_to, u64 base, u32 size);
+        static void read_blocks(Stream& stream, BlockMap& read_to, u32 base, u32 size);
         static inline u64 rotl(u64 val, u32 rotate)
         {
             rotate %= 64;

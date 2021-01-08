@@ -41,9 +41,9 @@ namespace LibFruit::FileFormat
         return script;
     }
 
-    void YSC::read_blocks(Stream& stream, BlockMap& read_to, u64 base, u32 size)
+    void YSC::read_blocks(Stream& stream, BlockMap& read_to, u32 base, u32 size)
     {
-        std::vector<u64> ptrs;
+        std::vector<u32> ptrs;
         stream.seek(base);
         for(u32 i = 0; i < YSC::Header::block_count(size); i++)
             ptrs.push_back(YSC::Header::to_pointer(stream.read<u64>()));
